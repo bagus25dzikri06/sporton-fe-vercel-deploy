@@ -4,7 +4,7 @@ import PriceFormatter from "@/app/utils/price-formatter";
 
 const ProductDetail = () => {
     return (
-        <main className="container mx-auto py-40 flex gap-12">
+        <main className="container mx-auto py-15 flex gap-12">
             <div className="bg-primary-alternate aspect-square min-w-140 justify-center items-center">
                 <Image 
                 src="/images/products/product-4.png" 

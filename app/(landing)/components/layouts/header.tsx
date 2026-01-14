@@ -5,9 +5,26 @@ import Link from "next/link";
 import { FiSearch, FiShoppingBag } from "react-icons/fi";
 import CartPopup from "../ui/cart-popup";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
+
+const navLinks = [
+    {
+        name: 'Home',
+        href: '/'
+    },
+    {
+        name: 'Category',
+        href: '#'
+    },
+    {
+        name: 'Explore Products',
+        href: '#'
+    }
+]
 
 const Header = () => {
     const [isCartPopupOpen, setIsCartPopupOpen] = useState(false)
+    const pathname = usePathname()
 
     return <header>
         <div className="flex justify-between gap-10 container mx-auto py-7">
@@ -20,19 +37,39 @@ const Header = () => {
                 />
             </Link>
             <nav className="flex gap-24 font-medium">
-                <Link href="/" className="relative 
-                after:content-[''] 
-                after:block 
-                after:bg-primary 
-                after:rounded-full 
-                after:h-[3px] 
-                after:w-1/2 
-                after:absolute 
-                after:left-1/2 
-                after:-translate-x-1/2 
-                after:translate-y-1">Home</Link>
-                <Link href="#">Category</Link>
-                <Link href="#">Explore Products</Link>
+                {
+                    navLinks.map((link) => {
+                        const isActive = pathname === link.href || (pathname.startsWith(link.href) && link.href !== '/')
+                        return (
+                            <Link 
+                                className={isActive ? `relative 
+                                after:content-[''] 
+                                after:block 
+                                after:bg-primary 
+                                after:rounded-full 
+                                after:h-[3px] 
+                                after:w-1/2 
+                                after:absolute 
+                                after:left-1/2 
+                                after:-translate-x-1/2 
+                                after:translate-y-1` : `relative 
+                                after:content-[''] 
+                                after:block 
+                                after:bg-white 
+                                after:rounded-full 
+                                after:h-[3px] 
+                                after:w-1/2 
+                                after:absolute 
+                                after:left-1/2 
+                                after:-translate-x-1/2 
+                                after:translate-y-1`}
+                                href={link.href} 
+                                key={link.name}>
+                                {link.name}
+                            </Link>
+                        )
+                    })
+                }
             </nav>
             <div className="relative flex gap-10">
                 <FiSearch size={24} />
