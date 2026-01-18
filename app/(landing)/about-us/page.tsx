@@ -1,5 +1,5 @@
 const AboutUs = () => {
-    return <main className="bg-gray-100 min-h-[80vh]">
+    return <main className="bg-gray-100 min-h-[80vh] pt-20">
         <div className="max-w-5xl mx-auto pt-15 pb-10">
             <h1 className="text-5xl font-bold text-center mb-11">About Us</h1>
         </div>
