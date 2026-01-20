@@ -41,3 +41,12 @@ html {
 .input-group input, .input-group textarea {
   @apply px-4 py-2.5 bg-gray-100 w-full focus:border focus:border-gray-400 outline-none text-sm;
 }
+
+/* INPUT GROUP ADMIN */
+.input-group-admin label {
+  @apply block text-xs mb-3;
+}
+
+.input-group-admin input, .input-group-admin select, .input-group-admin textarea {
+  @apply px-4 py-2.5 w-full border border-gray-300 rounded-md focus:border focus:border-gray-500 outline-none text-sm;
+}

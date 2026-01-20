@@ -13,8 +13,8 @@ const Button = ({children, className, variant = "primary", size = "normal", ...p
         ghost : 'bg-transparent hover:bg-gray-100 text-dark'
     }
     const sizes = {
-        normal : 'py-4 py-9',
-        small : 'py-[10px] py-7'
+        normal : 'py-4 px-9',
+        small : 'py-[10px] px-7'
     }
     return (
         <button className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`} {...props}>

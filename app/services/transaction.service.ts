@@ -8,6 +8,10 @@ export const transactionCheckout = async (form: FormData): Promise<Transaction> 
     })
 }
 
+export const getAllTransactions = async (): Promise<Transaction[]> => {
+    return await fetchAPI<Transaction[]>("/transactions")
+}
+
 export const getTransactionById = async (id: string): Promise<Transaction> => {
     return await fetchAPI<Transaction>(`/transactions/${id}`)
 }
