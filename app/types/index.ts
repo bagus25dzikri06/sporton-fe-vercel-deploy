@@ -1,5 +1,19 @@
 type UUID = string;
 
+export interface LoginCredentials {
+    email: string;
+    password: string;
+}
+
+export interface LoginResponse {
+    token: string;
+    user: {
+        id: string;
+        name: string;
+        email: string;
+    }
+}
+
 export interface Category {
     _id: UUID;
     name: string;
@@ -35,9 +49,9 @@ export interface Transaction {
     paymentProof: string;
     status: 'pending' | 'paid' | 'rejected',
     purchasedItems: {
-        productId: string;
+        productId: Product;
         qty: string;
-    },
+    }[],
     totalPayment: string;
     customerName : string;
     customerContact: string;

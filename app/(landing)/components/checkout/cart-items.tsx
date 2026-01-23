@@ -37,9 +37,9 @@ const CartItems = ({handlePayment}: TCartItems) => {
                                     <div className="text-primary">{PriceFormatter(item.price)}</div>
                                 </div>
                             </div>
-                            <Button size="small" variant="ghost" className="w-7 h-7 p-0 self-center ml-auto" onClick={() => removeItem(item._id)}>
-                                <FiTrash2 />
-                            </Button>
+                            <button className="w-7 h-7 p-0 self-center ml-auto cursor-pointer" onClick={() => removeItem(item._id)}>
+                                <FiTrash2 size={20} />
+                            </button>
                         </div>
                     ))
                 }

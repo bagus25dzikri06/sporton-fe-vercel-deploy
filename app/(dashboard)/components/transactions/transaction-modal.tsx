@@ -1,63 +1,148 @@
+"use client";
+
 import Image from "next/image";
 import Modal from "../ui/modal";
-import PriceFormatter from "@/app/utils/price-formatter";
 import Button from "@/app/(landing)/components/ui/button";
 import { FiCheck, FiX } from "react-icons/fi";
+import { Transaction } from "@/app/types";
+import { Suspense, useState } from "react";
+import { getImageUrl } from "@/app/lib/api";
+import moment from "moment";
 
 type TTransactionModalProps = {
     isOpen: boolean;
     onClose: () => void;
+    transaction: Transaction;
+    onStatusChange: (
+        id: string,
+        status: 'paid' | 'rejected'
+    ) => Promise<void>;
 }
 
-const TransactionModal = ({isOpen, onClose} : TTransactionModalProps) => {
+const TransactionModal = ({isOpen, onClose, transaction, onStatusChange} : TTransactionModalProps) => {
+    const [isUpdating, setIsUpdating] = useState(false)
+    const handleStatusChange = async (status : 'paid' | 'rejected') => {
+        setIsUpdating(true)
+        try {
+            await onStatusChange(transaction._id, status)
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setIsUpdating(false)
+        }
+    }
+    if (!transaction) {
+        return
+    }
+     
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="Verify Transactions">
             <div className="flex gap-6">
-                <div>
+                <div className="min-w-50">
                     <h4 className="font-semibold text-xs mb-2">Payment Proof</h4>
-                    <Image src="/images/payment-proof-dummy.png" alt="payment proof" width={200} height={401} />
+                    {
+                        transaction.paymentProof ? (
+                            <Image 
+                            src={getImageUrl(transaction.paymentProof)}
+                            alt="payment proof" 
+                            width={200} 
+                            height={401} />
+                        ) : (
+                            <div className="text-center p-4">
+                                <div className="text-sm">No payment proof uploaded.</div>
+                            </div>
+                        )
+                    }
                 </div>
-                <div>
+                <div className="w-full">
                     <div>
                         <h4 className="font-semibold text-xs mb-2">Order Details</h4>
                         <div className="bg-gray-100 rounded-md flex flex-col gap-2.5 p-4">
                             <div className="flex justify-between font-medium">
                                 <div className="opacity-50">Date</div>
-                                <div className="text-right">23/02/2026 19:32</div>
+                                <div className="text-right">{moment(transaction.createdAt).format('DD/MM/YYYY HH:mm')}</div>
                             </div>
                             <div className="flex justify-between font-medium">
                                 <div className="opacity-50">Customer</div>
-                                <div className="text-right">John Doe</div>
+                                <div className="text-right">{transaction.customerName}</div>
                             </div>
                             <div className="flex justify-between font-medium">
                                 <div className="opacity-50">Contact</div>
-                                <div className="text-right">08123456789</div>
+                                <div className="text-right">{transaction.customerContact}</div>
                             </div>
                             <div className="flex justify-between font-medium">
                                 <div className="opacity-50 whitespace-nowrap">Shipping Address</div>
-                                <div className="text-right">Merdeka Street, Jakarta, Indonesia, 332122</div>
+                                <div className="text-right">{transaction.customerAddress}</div>
                             </div>
                         </div>
                     </div>
                     <h4 className="font-semibold text-xs mb-2">Items Purchased</h4>
-                    <div className="border border-gray-200 rounded-lg p-2 flex items-center gap-2">
-                        <div className="bg-gray-100 rounded aspect-square w-8 h-8">
-                            <Image src="/images/products/product-3.png" width={30} height={30} alt="product image" />
-                        </div>
-                        <div className="font-medium text-xs">SportsOn Hyperfast Shoes</div>
-                        <div className="font-medium ml-auto text-xs">3 units</div>
+                    <div className="space-y-3">
+                        {
+                            transaction.purchasedItems.map((data) => (
+                                <div key={data.productId._id} className="border border-gray-200 rounded-lg p-2 flex items-center gap-2">
+                                    <div className="bg-gray-100 rounded aspect-square w-8 h-8">
+                                        <Image 
+                                        src={getImageUrl(data.productId.imageUrl)} 
+                                        width={30} 
+                                        height={30} 
+                                        alt="product image" />
+                                    </div>
+                                    <div className="font-medium text-xs">{data.productId.name}</div>
+                                    <div className="font-medium ml-auto text-xs">{data.qty}</div>
+                                </div>
+                            ))
+                        }
                     </div>
                     <div className="flex justify-between text-xs mt-4">
                         <h4 className="font-semibold">Total</h4>
-                        <div className="text-primary font-semibold">{PriceFormatter(1000000)}</div>
+                        <div className="text-primary font-semibold">{transaction.totalPayment}</div>
                     </div>
                     <div className="flex justify-end gap-5 mt-10">
-                        <Button className="text-primary! bg-primary-alternate! rounded-md" size="small">
-                            <FiX size={20} /> Reject
-                        </Button>
-                        <Button className="text-white! bg-[#50C252]! rounded-md" size="small">
-                            <FiCheck size={20} /> Approve
-                        </Button>
+                        {
+                            transaction.status === 'pending' && (
+                                isUpdating ? (<>
+                                    <div className="font-semibold">Updating...</div>
+                                </>) : (
+                                <>
+                                    <Button 
+                                        className="text-primary! bg-primary-alternate! rounded-md" 
+                                        size="small"
+                                        onClick={() => handleStatusChange('rejected')}
+                                        disabled={isUpdating}>
+                                            <>
+                                                <FiX size={20} /> 
+                                                Reject
+                                            </>
+                                    </Button>
+                                    <Button 
+                                        className="text-white! bg-[#50C252]! rounded-md" 
+                                        size="small"
+                                        onClick={() => handleStatusChange('paid')}
+                                        disabled={isUpdating}>
+                                            <>
+                                                <FiCheck size={20} />
+                                                Approve
+                                            </>
+                                    </Button>
+                                </>
+                                )
+                            )
+                        }
+                        {
+                            transaction.status === 'paid' && (
+                                <Suspense fallback={<div className="font-semibold">Loading...</div>}>
+                                    <div className="font-semibold text-green-600">Transaction has been paid</div>
+                                </Suspense>
+                            )
+                        }
+                        {
+                            transaction.status === 'rejected' && (
+                                <Suspense fallback={<div className="font-semibold">Loading...</div>}>
+                                    <div className="font-semibold text-red-600">Transaction has been rejected</div>
+                                </Suspense>
+                            )
+                        }
                     </div>
                 </div>
             </div>

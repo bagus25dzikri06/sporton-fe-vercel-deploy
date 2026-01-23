@@ -1,29 +1,80 @@
 "use client";
 
-import { Suspense, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import TransactionTable from "../../components/transactions/transaction-table";
 import TransactionModal from "../../components/transactions/transaction-modal";
+import { getAllTransactions, updateTransaction } from "@/app/services/transaction.service";
+import { Transaction } from "@/app/types";
+import { toast } from "react-toastify";
 
 const TransactionManagement = () => {
-    const [isOpen, setIsOpen] = useState(false)
+    const [transactions, setTransaction] = useState<Transaction[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null)
     const handleCloseModal = () => {
-        setIsOpen(false)
+        setIsModalOpen(false)
+        setSelectedTransaction(null)
     }
-    const handleViewDetails = () => {
-        setIsOpen(true)
+    const handleViewDetails = (transaction : Transaction) => {
+        setIsModalOpen(true)
+        setSelectedTransaction(transaction)
     }
+
+    const fetchData = async () => {
+        try {
+            const data = await getAllTransactions()
+            if (data) {
+                setTransaction(data)
+            }
+        } catch (error) {
+            console.error('Failed to fetch transactions', error)
+        }
+    }
+
+    const handleStatusChange = async (id: string, status: 'paid' | 'rejected') => {
+        try {
+            const formData = new FormData()
+            formData.append('status', status)
+            await updateTransaction(id, formData)
+
+            if (status === 'paid') {
+                toast.success('Transaction status is paid successfully')
+            } else {
+                toast.error('Transaction status is rejected successfully')
+            }
+
+            await fetchData()
+        } catch (error) {
+            if (status === 'paid') {
+                console.error('Failed to pay transaction', error)
+                toast.error('Failed to pay transaction')
+            } else {
+                console.error('Failed to reject transaction', error)
+                toast.error('Failed to reject transaction')
+            }
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+    
     return (
         <div>
             <div className="flex justify-between items-center mb-10">
                 <div>
                     <h1 className="font-bold text-2xl">Transactions</h1>
-                    <p className="opacity-50">Verify incoming payments and manage orders.</p>
+                    <p className="text-gray-500">Verify incoming payments and manage orders.</p>
                 </div>
             </div>
             <Suspense fallback={<div>Loading...</div>}>
-                <TransactionTable onViewDetails={handleViewDetails} />
+                <TransactionTable transactions={transactions} onViewDetails={handleViewDetails} />
             </Suspense>
-            <TransactionModal isOpen={isOpen} onClose={handleCloseModal} />
+            <TransactionModal 
+            transaction={selectedTransaction}
+            onStatusChange={handleStatusChange} 
+            isOpen={isModalOpen} 
+            onClose={handleCloseModal} />
         </div>
     )
 }
