@@ -39,7 +39,7 @@ const [currentPage, setCurrentPage] = useState(1);
     }
     const filtered = searchFilter(banks)
     
-    const handlePageChange = (pageNumber) => {
+    const handlePageChange = (pageNumber : number) => {
         setCurrentPage(pageNumber);
     };
     const handleRowsPerPageChange = (e) => {

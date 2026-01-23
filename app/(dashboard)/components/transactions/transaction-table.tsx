@@ -39,7 +39,7 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
     }
     const filtered = searchFilter(transactions)
     
-    const handlePageChange = (pageNumber) => {
+    const handlePageChange = (pageNumber : number) => {
         setCurrentPage(pageNumber);
     };
     const handleRowsPerPageChange = (e) => {

@@ -42,7 +42,7 @@ const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
     }
     const filtered = searchFilter(products)
 
-    const handlePageChange = (pageNumber) => {
+    const handlePageChange = (pageNumber : number) => {
         setCurrentPage(pageNumber);
     };
     const handleRowsPerPageChange = (e) => {

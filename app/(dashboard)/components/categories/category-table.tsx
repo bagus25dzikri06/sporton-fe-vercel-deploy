@@ -41,7 +41,7 @@ const CategoryTable = ({categories, onDelete, onEdit}: TCategoryTableProps) => {
     }
     const filtered = searchFilter(categories)
     
-    const handlePageChange = (pageNumber) => {
+    const handlePageChange = (pageNumber : number) => {
         setCurrentPage(pageNumber);
     };
     const handleRowsPerPageChange = (e) => {
