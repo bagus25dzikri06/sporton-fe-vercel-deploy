@@ -3,7 +3,7 @@
 import { getImageUrl } from "@/app/lib/api"
 import { Category } from "@/app/types"
 import Image from "next/image"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { FiEdit2, FiTrash2 } from "react-icons/fi"
 
 type TCategoryTableProps = {
@@ -49,7 +49,7 @@ const CategoryTable = ({categories, onDelete, onEdit}: TCategoryTableProps) => {
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
-    const handleChange = (e) => {
+    const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
     }
 

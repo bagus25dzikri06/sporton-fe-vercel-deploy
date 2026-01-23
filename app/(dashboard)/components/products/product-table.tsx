@@ -4,7 +4,7 @@ import { getImageUrl } from "@/app/lib/api"
 import { Product } from "@/app/types"
 import PriceFormatter from "@/app/utils/price-formatter"
 import Image from "next/image"
-import { useState } from "react"
+import { ChangeEvent, useState } from "react"
 import { FiEdit2, FiTrash2 } from "react-icons/fi"
 
 type TProductTableProps = {
@@ -50,7 +50,7 @@ const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
-    const handleChange = (e) => {
+    const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
     }
     

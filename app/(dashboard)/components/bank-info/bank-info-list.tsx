@@ -1,7 +1,7 @@
 "use client";
 
 import { Bank } from "@/app/types"
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { FiCreditCard, FiEdit2, FiTrash2 } from "react-icons/fi"
 
 type TBankInfoListProps = {
@@ -47,7 +47,7 @@ const [currentPage, setCurrentPage] = useState(1);
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
-    const handleChange = (e) => {
+    const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
     }
     

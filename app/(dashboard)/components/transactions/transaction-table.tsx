@@ -3,7 +3,7 @@
 import { Transaction } from "@/app/types";
 import { FiEye } from "react-icons/fi"
 import moment from 'moment'
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 type TTransactionTableProps = {
     onViewDetails: (transaction : Transaction) => void;
@@ -47,7 +47,7 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
-    const handleChange = (e) => {
+    const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
     }
 
