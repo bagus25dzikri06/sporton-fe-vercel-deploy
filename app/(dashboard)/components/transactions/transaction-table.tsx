@@ -42,8 +42,8 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
     const handlePageChange = (pageNumber : number) => {
         setCurrentPage(pageNumber);
     };
-    const handleRowsPerPageChange = (e) => {
-        setRowsPerPage(e.target.value);
+    const handleRowsPerPageChange = (e : ChangeEvent<HTMLSelectElement>) => {
+        setRowsPerPage(Number(e.target.value));
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 

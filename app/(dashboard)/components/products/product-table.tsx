@@ -15,7 +15,7 @@ type TProductTableProps = {
 
 const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState<number>(5);
     const [query, setQuery] = useState('')
     const totalPages = Math.ceil(products.length / rowsPerPage);
 
@@ -45,8 +45,8 @@ const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
     const handlePageChange = (pageNumber : number) => {
         setCurrentPage(pageNumber);
     };
-    const handleRowsPerPageChange = (e) => {
-        setRowsPerPage(e.target.value);
+    const handleRowsPerPageChange = (e : ChangeEvent<HTMLSelectElement>) => {
+        setRowsPerPage(Number(e.target.value));
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
