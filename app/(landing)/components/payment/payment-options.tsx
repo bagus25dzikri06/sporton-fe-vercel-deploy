@@ -3,9 +3,8 @@
 import { FiCreditCard } from "react-icons/fi"
 import CardWithHeader from "../ui/card-with-header"
 import { getAllBanks } from "@/app/services/bank.service"
-import { useEffect, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { Bank } from "@/app/types";
-import CapitalizeEachWord from "@/app/utils/capitalize-each-word";
 
 const PaymentOptions = () => {
     const [banks, setBank] = useState<Bank[]>([])
@@ -14,11 +13,15 @@ const PaymentOptions = () => {
     const [query, setQuery] = useState('')
     const totalPages = Math.ceil(banks.length / rowsPerPage);
 
-    const safeCapitalize = (str : string) => {
+const safeCapitalize = (str : string) => {
         if (str.length === 0) {
             return '';
         }
-        return str[0].toUpperCase() + str.slice(1);
+        if (str.slice(1).split('').some((letter) => letter === letter.toUpperCase()) === true) {
+            return str[0].toUpperCase() + str.slice(1).toLowerCase();
+        } else {
+            return str[0].toUpperCase() + str.slice(1);
+        }
     }
     const capitalizeEachWord = (sentence : string) => {
         return sentence
@@ -26,10 +29,9 @@ const PaymentOptions = () => {
             .map((word : string) => safeCapitalize(word))
             .join(' ');
     }
-
     const searchFilter = (array : Array<Bank>) => {
         return array.filter(
-            (el) => el.bankName.includes(capitalizeEachWord(query))
+                (el) => el.bankName.includes(query) || el.bankName.includes(capitalizeEachWord(query))
         )
     }
     const filtered = searchFilter(banks)
@@ -37,8 +39,8 @@ const PaymentOptions = () => {
     const handlePageChange = (pageNumber : number) => {
         setCurrentPage(pageNumber);
     };
-    const handleRowsPerPageChange = (e) => {
-        setRowsPerPage(e.target.value);
+    const handleRowsPerPageChange = (e : ChangeEvent<HTMLSelectElement>) => {
+        setRowsPerPage(Number(e.target.value));
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
@@ -53,7 +55,7 @@ const PaymentOptions = () => {
         }
     }
 
-    const handleChange = (e) => {
+    const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
     }
 
