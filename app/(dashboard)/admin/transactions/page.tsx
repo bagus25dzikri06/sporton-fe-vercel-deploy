@@ -37,6 +37,8 @@ const TransactionManagement = () => {
             formData.append('status', status)
             await updateTransaction(id, formData)
 
+            setIsModalOpen(false)
+
             if (status === 'paid') {
                 toast.success('Transaction status is paid successfully')
             } else {

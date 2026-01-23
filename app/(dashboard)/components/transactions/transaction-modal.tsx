@@ -12,7 +12,7 @@ import moment from "moment";
 type TTransactionModalProps = {
     isOpen: boolean;
     onClose: () => void;
-    transaction: Transaction;
+    transaction: Transaction | null;
     onStatusChange: (
         id: string,
         status: 'paid' | 'rejected'
