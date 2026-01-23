@@ -21,10 +21,10 @@ type TTransactionModalProps = {
 
 const TransactionModal = ({isOpen, onClose, transaction, onStatusChange} : TTransactionModalProps) => {
     const [isUpdating, setIsUpdating] = useState(false)
-    const handleStatusChange = async (status : 'paid' | 'rejected') => {
+    const handleStatusChange = async (id : string, status : 'paid' | 'rejected') => {
         setIsUpdating(true)
         try {
-            await onStatusChange(transaction._id, status)
+            await onStatusChange(id, status)
         } catch (error) {
             console.error(error)
         } finally {
@@ -108,7 +108,7 @@ const TransactionModal = ({isOpen, onClose, transaction, onStatusChange} : TTran
                                     <Button 
                                         className="text-primary! bg-primary-alternate! rounded-md" 
                                         size="small"
-                                        onClick={() => handleStatusChange('rejected')}
+                                        onClick={() => handleStatusChange(transaction._id, 'rejected')}
                                         disabled={isUpdating}>
                                             <>
                                                 <FiX size={20} /> 
@@ -118,7 +118,7 @@ const TransactionModal = ({isOpen, onClose, transaction, onStatusChange} : TTran
                                     <Button 
                                         className="text-white! bg-[#50C252]! rounded-md" 
                                         size="small"
-                                        onClick={() => handleStatusChange('paid')}
+                                        onClick={() => handleStatusChange(transaction._id, 'rejected')}
                                         disabled={isUpdating}>
                                             <>
                                                 <FiCheck size={20} />

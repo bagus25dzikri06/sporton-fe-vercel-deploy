@@ -34,7 +34,7 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
     }
     const searchFilter = (array : Array<Transaction>) => {
         return array.filter(
-                (el) => el.customerName.startsWith(query) || el.customerName.startsWith(capitalizeEachWord(query))
+                (el) => el.customerName.includes(query) || el.customerName.includes(capitalizeEachWord(query))
         )
     }
     const filtered = searchFilter(transactions)
