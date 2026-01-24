@@ -1,10 +1,11 @@
 "use client";
 
 import { getImageUrl } from "@/app/lib/api"
-import { Product } from "@/app/types"
+import { getAllCategories } from "@/app/services/category.service";
+import { Category, Product } from "@/app/types"
 import PriceFormatter from "@/app/utils/price-formatter"
 import Image from "next/image"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
 import { FiEdit2, FiTrash2 } from "react-icons/fi"
 
 type TProductTableProps = {
@@ -14,6 +15,8 @@ type TProductTableProps = {
 }
 
 const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
+    const [category, setCategory] = useState<Category[]>([])
+    const [selectedCategory, setSelectedCategory] = useState('')
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState<number>(5);
     const [query, setQuery] = useState('')
@@ -50,86 +53,196 @@ const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
     };
     const rows = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
+    const fetchData = async () => {
+        try {
+            const data = await getAllCategories()
+            if (data) {
+                setCategory(data)
+            }
+        } catch (error) {
+            console.error('Failed to fetch categories', error)
+        }
+    }
+
+    const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedCategory(e.target.value)
+    }
     const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value)
     }
+
+    useEffect(() => {
+        fetchData()
+    }, [])
     
-    return (
-        <div>
-            <input 
-            onChange={handleChange} 
-            type='text' 
-            className="rounded-lg w-[78%] border border-gray-300 p-2 my-2"
-            placeholder='Search By The Product Name'/>
-            <div className="bg-white rounded-xl border border-gray-200">
-                <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="border-b border-gray-200">
-                            <th className="px-6 py-4 font-semibold">Product</th>
-                            <th className="px-6 py-4 font-semibold">Category</th>
-                            <th className="px-6 py-4 font-semibold">Price</th>
-                            <th className="px-6 py-4 font-semibold">Stock</th>
-                            <th className="px-6 py-4 font-semibold">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            rows.map((data) => (
-                                <tr key={data._id} className="border-b border-gray-200 last:border-b-0">
-                                    <td className="px-6 py-4 font-medium">
-                                        <div className="flex gap-2 items-center">
-                                            <div className="aspect-square bg-gray-100 rounded-md">
-                                                <Image 
-                                                src={getImageUrl(data.imageUrl)} 
-                                                width={52} 
-                                                height={52} 
-                                                alt={data.name}
-                                                className="aspect-square object-contain" />
-                                            </div>
-                                            <span>{data.name}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 font-medium">
-                                        <div className="rounded-md bg-gray-200 px-2 py-1 w-fit">
-                                            {data.category.name}
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 font-medium">{PriceFormatter(data.price)}</td>
-                                    <td className="px-6 py-4 font-medium">{data.stock} units</td>
-                                    <td className="px-6 py-7.5 self-center flex items-center gap-3 text-gray-600">
-                                        <button onClick={() => onEdit?.(data)} className="cursor-pointer">
-                                            <FiEdit2 size={20} />
-                                        </button>
-                                        <button onClick={() => onDelete?.(data._id)} className="cursor-pointer"><FiTrash2 size={20} /></button>
-                                    </td>
-                                </tr>
-                            ))
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div className="flex justify-center">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
-                    <button
-                        key={pageNumber}
-                        className={`m-1 px-3 py-2 border rounded cursor-pointer ${
-                        currentPage === pageNumber ? 'bg-primary text-white' : 'bg-primary-alternate text-primary'
-                        }`}
-                        onClick={() => handlePageChange(pageNumber)}
-                    >
-                        {pageNumber}
-                    </button>
-                ))}
-                <select className="m-1 border border-gray-400 rounded" onChange={handleRowsPerPageChange}>
-                    {[5, 10, 15, 20, 25].map((option) => (
-                        <option key={option} value={option}>
-                            {option}
-                        </option>
-                    ))}
+    return (<div>
+            <div className="flex space-x-4">
+                <input 
+                onChange={handleChange} 
+                type='text' 
+                className="rounded-lg w-[78%] bg-white border border-gray-300 p-2 my-2"
+                placeholder='Search By The Product Name'/>
+                <select 
+                name="categoryId" 
+                id="categoryId" 
+                className="rounded-lg bg-white border border-gray-300 p-2 my-2"
+                value={selectedCategory} 
+                onChange={handleFilterChange}>
+                    <option value="" disabled hidden>-- Filter By Category --</option>
+                    <option value="">All</option>
+                    {
+                        category.map((data) => (
+                            <option value={data.name} key={data._id}>{data.name}</option>
+                        ))
+                    }
                 </select>
             </div>
-        </div>
-    )
+            {
+                selectedCategory === '' ? (<>
+                <div className="bg-white rounded-xl border border-gray-200">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="border-b border-gray-200">
+                                <th className="px-6 py-4 font-semibold">Product</th>
+                                <th className="px-6 py-4 font-semibold">Category</th>
+                                <th className="px-6 py-4 font-semibold">Price</th>
+                                <th className="px-6 py-4 font-semibold">Stock</th>
+                                <th className="px-6 py-4 font-semibold">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                rows.map((data) => (
+                                    <tr key={data._id} className="border-b border-gray-200 last:border-b-0">
+                                        <td className="px-6 py-4 font-medium">
+                                            <div className="flex gap-2 items-center">
+                                                <div className="aspect-square bg-gray-100 rounded-md">
+                                                    <Image 
+                                                    src={getImageUrl(data.imageUrl)} 
+                                                    width={52} 
+                                                    height={52} 
+                                                    alt={data.name}
+                                                    className="aspect-square object-contain" />
+                                                </div>
+                                                <span>{data.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 font-medium">
+                                            <div className="rounded-md bg-gray-200 px-2 py-1 w-fit">
+                                                {data.category.name}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 font-medium">{PriceFormatter(data.price)}</td>
+                                        <td className="px-6 py-4 font-medium">{data.stock} units</td>
+                                        <td className="px-6 py-7.5 self-center flex items-center gap-3 text-gray-600">
+                                            <button onClick={() => onEdit?.(data)} className="cursor-pointer">
+                                                <FiEdit2 size={20} />
+                                            </button>
+                                            <button onClick={() => onDelete?.(data._id)} className="cursor-pointer"><FiTrash2 size={20} /></button>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div className="flex justify-center">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                        <button
+                            key={pageNumber}
+                            className={`m-1 px-3 py-2 border rounded cursor-pointer ${
+                            currentPage === pageNumber ? 'bg-primary text-white' : 'bg-primary-alternate text-primary'
+                            }`}
+                            onClick={() => handlePageChange(pageNumber)}
+                        >
+                            {pageNumber}
+                        </button>
+                    ))}
+                    <select className="m-1 border border-gray-400 rounded" onChange={handleRowsPerPageChange}>
+                        {[5, 10, 15, 20, 25].map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                </div></>) : selectedCategory !== '' && rows.filter(
+                    (data) => data.category.name === selectedCategory
+                ).length > 0 ? (<>
+                <div className="bg-white rounded-xl border border-gray-200">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="border-b border-gray-200">
+                                <th className="px-6 py-4 font-semibold">Product</th>
+                                <th className="px-6 py-4 font-semibold">Category</th>
+                                <th className="px-6 py-4 font-semibold">Price</th>
+                                <th className="px-6 py-4 font-semibold">Stock</th>
+                                <th className="px-6 py-4 font-semibold">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                rows.filter(
+                                    (data) => data.category.name === selectedCategory
+                                ).map((data) => (
+                                    <tr key={data._id} className="border-b border-gray-200 last:border-b-0">
+                                        <td className="px-6 py-4 font-medium">
+                                            <div className="flex gap-2 items-center">
+                                                <div className="aspect-square bg-gray-100 rounded-md">
+                                                    <Image 
+                                                    src={getImageUrl(data.imageUrl)} 
+                                                    width={52} 
+                                                    height={52} 
+                                                    alt={data.name}
+                                                    className="aspect-square object-contain" />
+                                                </div>
+                                                <span>{data.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 font-medium">
+                                            <div className="rounded-md bg-gray-200 px-2 py-1 w-fit">
+                                                {selectedCategory}
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 font-medium">{PriceFormatter(data.price)}</td>
+                                        <td className="px-6 py-4 font-medium">{data.stock} units</td>
+                                        <td className="px-6 py-7.5 self-center flex items-center gap-3 text-gray-600">
+                                            <button onClick={() => onEdit?.(data)} className="cursor-pointer">
+                                                <FiEdit2 size={20} />
+                                            </button>
+                                            <button onClick={() => onDelete?.(data._id)} className="cursor-pointer"><FiTrash2 size={20} /></button>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div className="flex justify-center">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                        <button
+                            key={pageNumber}
+                            className={`m-1 px-3 py-2 border rounded cursor-pointer ${
+                            currentPage === pageNumber ? 'bg-primary text-white' : 'bg-primary-alternate text-primary'
+                            }`}
+                            onClick={() => handlePageChange(pageNumber)}
+                        >
+                            {pageNumber}
+                        </button>
+                    ))}
+                    <select className="m-1 border border-gray-400 rounded" onChange={handleRowsPerPageChange}>
+                        {[5, 10, 15, 20, 25].map((option) => (
+                            <option key={option} value={option}>
+                                {option}
+                            </option>
+                        ))}
+                    </select>
+                </div></>) : (<>
+                    <div className="text-center text-gray-500 text-xl py-5">
+                        Product data not found
+                    </div>
+                </>)
+            }
+        </div>)       
 }
 
 export default ProductTable

@@ -180,7 +180,7 @@ const ProductModal = ({isOpen, onClose, onSuccess, product} : TProductModalProps
                         <div className="input-group-admin">
                             <label htmlFor="categoryId">Category</label>
                             <select name="categoryId" id="categoryId" value={formData.categoryId} onChange={handleChange}>
-                                <option value="" disabled>Select Category</option>
+                                <option value="" disabled hidden>--Select Category--</option>
                                 {
                                     category.map((data) => (
                                         <option value={data._id} key={data._id}>{data.name}</option>

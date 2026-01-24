@@ -42,7 +42,7 @@ const CartPopup = () => {
                     </button>
                 </div>
             )) : (
-                <div className="text-center opacity-50 py-5">
+                <div className="text-center text-gray-500 py-5">
                     Your shopping cart is empty
                 </div>
             )
