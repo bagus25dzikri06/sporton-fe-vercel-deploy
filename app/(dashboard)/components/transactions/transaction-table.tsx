@@ -51,13 +51,21 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
     const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedTransactionStatus(e.target.value)
     }
+    const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
+        setQuery(e.target.value)
+    }
 
     return (
         <div>
-            <div className="flex justify-end">
+            <div className="flex justify-end space-x-4">
+                <input 
+                onChange={handleChange} 
+                type='text' 
+                className="rounded-lg w-[78%] bg-white border border-gray-300 p-2 my-2"
+                placeholder='Search By The Customer Name'/>
                 <select 
-                name="categoryId" 
-                id="categoryId" 
+                name="status" 
+                id="status" 
                 className="rounded-lg bg-white border border-gray-300 p-2 my-2"
                 value={selectedTransactionStatus} 
                 onChange={handleFilterChange}>
@@ -92,27 +100,13 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
                                     <td className="px-6 py-4 font-medium">{data.customerContact}</td>
                                     <td className="px-6 py-4 font-medium">{data.totalPayment}</td>
                                     <td className="px-6 py-4 font-medium">
-                                        {
-                                            data.status === 'pending' && (
-                                                <div className="px-2 py-1 rounded-full border text-center bg-yellow-100 text-yellow-600 border-yellow-200">
-                                                    {data.status.toUpperCase()}
-                                                </div>
-                                            )
-                                        }
-                                        {
-                                            data.status === 'paid' && (
-                                                <div className="px-2 py-1 rounded-full border text-center bg-green-100 text-green-600 border-green-200">
-                                                    {data.status.toUpperCase()}
-                                                </div>
-                                            )
-                                        }
-                                        {
-                                            data.status === 'rejected' && (
-                                                <div className="px-2 py-1 rounded-full border text-center bg-red-100 text-red-600 border-red-200">
-                                                    {data.status.toUpperCase()}
-                                                </div>
-                                            )
-                                        }
+                                        <div className={`px-2 py-1 rounded-full border text-center ${
+                                            data.status === 'pending' ? 'bg-yellow-100 text-yellow-600 border-yellow-200' : 
+                                            data.status === 'paid' ? 'bg-green-100 text-green-600 border-green-200' : 
+                                            'bg-red-100 text-red-600 border-red-200'}`
+                                        }>
+                                            {data.status.toUpperCase()}
+                                        </div>
                                     </td>
                                     <td className="px-6 py-7.5 self-center flex items-center gap-3 text-gray-600">
                                         <button onClick={() => onViewDetails(data)} className="flex gap-2">
@@ -169,7 +163,11 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
                                     <td className="px-6 py-4 font-medium">{data.customerContact}</td>
                                     <td className="px-6 py-4 font-medium">{data.totalPayment}</td>
                                     <td className="px-6 py-4 font-medium">
-                                        <div className="px-2 py-1 rounded-full border text-center bg-yellow-100 text-yellow-600 border-yellow-200">
+                                        <div className={`px-2 py-1 rounded-full border text-center ${
+                                            selectedTransactionStatus === 'pending' ? 'bg-yellow-100 text-yellow-600 border-yellow-200' : 
+                                            selectedTransactionStatus === 'paid' ? 'bg-green-100 text-green-600 border-green-200' : 
+                                            'bg-red-100 text-red-600 border-red-200'}`
+                                        }>
                                             {selectedTransactionStatus.toUpperCase()}
                                         </div>
                                     </td>
