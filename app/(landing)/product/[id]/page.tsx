@@ -24,7 +24,7 @@ const ProductDetail = async ({params}: TPageProps) => {
             </div>
             <div className="w-full py-7">
                 <h1 className="font-bold text-5xl mb-4">{product.name}</h1>
-                <div className="bg-primary-alternate rounded-full text-primary py-2 px-6 w-fit mb-5">{product.category.name}</div>
+                <div className="bg-primary-alternate rounded-full text-primary py-2 px-6 w-fit mb-5">{product.category?.name}</div>
                 <p className="leading-loose mb-8">{product.description}</p>
                 <div className="text-primary text-[32px] font-semibold mb-12">{PriceFormatter(product.price)}</div>
                 <ProductActions product={product} stock={product.stock} />
