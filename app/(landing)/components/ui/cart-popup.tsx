@@ -12,6 +12,10 @@ const CartPopup = () => {
     const {push} = useRouter()
     const {items, removeItem} = useCartStore()
     const handleCheckout= () => {
+        if (items.length === 0) {
+            alert('Your shopping must not be empty before checking out')
+            return
+        }
         push("/checkout")
     }
 
@@ -20,7 +24,7 @@ const CartPopup = () => {
     return <div className="absolute bg-white right-0 top-12 shadow-xl shadow-black/10 border border-gray-200 w-90 z-10">
         <div className="p-4 border-b border-gray-200 font-bold text-center">Shopping Cart</div>
         {
-            items.length ? items.map((item, index) => (
+            items.length > 0 ? items.map((item, index) => (
                 <div className="border border-gray-200 p-4 flex gap-3" key={index}>
                     <div className="bg-primary-alternate aspect-square w-16 flex justify-center items-center">
                         <Image 

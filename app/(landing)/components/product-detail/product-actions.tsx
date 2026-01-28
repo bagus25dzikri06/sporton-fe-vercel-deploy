@@ -13,13 +13,21 @@ type TProductActionProps = {
 }
 
 const ProductActions = ({ product, stock }: TProductActionProps) => {
-    const {addItem} = useCartStore()
+    const {items, addItem} = useCartStore()
     const {push} = useRouter()
-    const [qty, setQty] = useState(1)
+    const [qty, setQty] = useState(0)
     const handleAddToCart = () => {
+        if (qty === 0) {
+            alert('Please, fill in the quantity of the products you want to buy')
+            return
+        }
         addItem(product, qty)
     }
     const checkout = () => {
+        if (items.length === 0) {
+            alert('Your shopping must not be empty before checking out')
+            return
+        }
         push("/checkout")
     }
 
