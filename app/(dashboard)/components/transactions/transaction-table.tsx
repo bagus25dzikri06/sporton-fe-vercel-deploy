@@ -4,6 +4,7 @@ import { Transaction } from "@/app/types";
 import { FiEye } from "react-icons/fi"
 import moment from 'moment'
 import { ChangeEvent, useState } from "react";
+import PriceFormatter from "@/app/utils/price-formatter";
 
 type TTransactionTableProps = {
     onViewDetails: (transaction : Transaction) => void;
@@ -98,7 +99,7 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
                                     </td>
                                     <td className="px-6 py-4 font-medium">{data.customerName}</td>
                                     <td className="px-6 py-4 font-medium">{data.customerContact}</td>
-                                    <td className="px-6 py-4 font-medium">{data.totalPayment}</td>
+                                    <td className="px-6 py-4 font-medium">{PriceFormatter(Number(data.totalPayment))}</td>
                                     <td className="px-6 py-4 font-medium">
                                         <div className={`px-2 py-1 rounded-full border text-center ${
                                             data.status === 'pending' ? 'bg-yellow-100 text-yellow-600 border-yellow-200' : 
@@ -161,7 +162,7 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
                                     </td>
                                     <td className="px-6 py-4 font-medium">{data.customerName}</td>
                                     <td className="px-6 py-4 font-medium">{data.customerContact}</td>
-                                    <td className="px-6 py-4 font-medium">{data.totalPayment}</td>
+                                    <td className="px-6 py-4 font-medium">{PriceFormatter(Number(data.totalPayment))}</td>
                                     <td className="px-6 py-4 font-medium">
                                         <div className={`px-2 py-1 rounded-full border text-center ${
                                             selectedTransactionStatus === 'pending' ? 'bg-yellow-100 text-yellow-600 border-yellow-200' : 
@@ -172,7 +173,7 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
                                         </div>
                                     </td>
                                     <td className="px-6 py-7.5 self-center flex items-center gap-3 text-gray-600">
-                                        <button onClick={() => onViewDetails(data)} className="flex gap-2">
+                                        <button onClick={() => onViewDetails(data)} className="flex gap-2 cursor-pointer">
                                             <FiEye size={20} /> View Details
                                         </button>
                                     </td>

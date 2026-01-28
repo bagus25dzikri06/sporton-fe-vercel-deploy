@@ -8,6 +8,7 @@ import { Transaction } from "@/app/types";
 import { Suspense, useState } from "react";
 import { getImageUrl } from "@/app/lib/api";
 import moment from "moment";
+import PriceFormatter from "@/app/utils/price-formatter";
 
 type TTransactionModalProps = {
     isOpen: boolean;
@@ -96,7 +97,7 @@ const TransactionModal = ({isOpen, onClose, transaction, onStatusChange} : TTran
                     </div>
                     <div className="flex justify-between text-xs mt-4">
                         <h4 className="font-semibold">Total</h4>
-                        <div className="text-primary font-semibold">{transaction.totalPayment}</div>
+                        <div className="text-primary font-semibold">{PriceFormatter(Number(transaction.totalPayment))}</div>
                     </div>
                     <div className="flex justify-end gap-5 mt-10">
                         {
