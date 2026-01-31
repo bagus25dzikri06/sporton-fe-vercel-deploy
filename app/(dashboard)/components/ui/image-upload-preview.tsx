@@ -23,7 +23,7 @@ const ImageUploadPreview = ({label, value, onChange, className}: TImageUploadPre
         <div className={className}>
             <div
                 onClick={handleImageClick} 
-                className="border-2 border-dashed border-primary bg-primary/5 rounded-lg h-50 flex flex-col justify-center items-center">
+                className="border-2 border-dashed border-primary bg-primary/5 rounded-lg h-50 flex flex-col justify-center items-center cursor-pointer">
                     {
                         value ? (
                             <Image 

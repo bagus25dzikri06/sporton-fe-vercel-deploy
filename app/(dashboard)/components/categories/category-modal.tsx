@@ -53,6 +53,14 @@ const CategoryModal = ({isOpen, onClose, onSuccess, category} : TCategoryModalPr
             if (isEditMode) {
                 await updateCategory(category._id, data)
             } else {
+                if (
+                    !formData.name || 
+                    !formData.description || 
+                    !imageFile 
+                ) {
+                    alert('Please, fill in all fields!')
+                    return
+                }
                 await createCategory(data)
             }
     

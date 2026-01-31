@@ -75,6 +75,17 @@ const ProductModal = ({isOpen, onClose, onSuccess, product} : TProductModalProps
             if (isEditMode) {
                 await updateProduct(product._id, data)
             } else {
+                if (
+                    !formData.name ||
+                    !formData.price ||
+                    !formData.stock ||
+                    !formData.categoryId ||
+                    !formData.description || 
+                    !imageFile
+                ) {
+                    alert('Please, fill in all fields!')
+                    return
+                }
                 await createProduct(data)
             }
 

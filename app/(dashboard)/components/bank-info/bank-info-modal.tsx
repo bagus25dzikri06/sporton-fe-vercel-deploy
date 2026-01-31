@@ -44,6 +44,14 @@ const BankInfoModal = ({isOpen, onClose, bank, onSuccess} : TBankInfoModalProps)
             if (isEditMode) {
                 await updateBank(bank._id, formData)
             } else {
+                if (
+                    !formData.bankName || 
+                    !formData.accountName || 
+                    !formData.accountNumber 
+                ) {
+                    alert('Please, fill in all fields!')
+                    return
+                }
                 await createBank(formData)
             }
         
