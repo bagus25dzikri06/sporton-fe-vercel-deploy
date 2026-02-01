@@ -62,7 +62,7 @@ const CategoriesSection = ({categories}: TCategoriesProps) => {
                         className="mx-10"
                         key={category._id}
                     >
-                        <div className="self-center rounded-lg bg-gradient-to-r from-[#F1F1F1] to-[#F7F7F7] w-[75%] h-[75%] space-x-3 p-3">
+                        <div className="self-center rounded-lg bg-gradient-to-r from-[#F1F1F1] to-[#F7F7F7] w-[75%] h-[75%] space-x-3 p-10">
                             <Image 
                                 src={getImageUrl(category.imageUrl)} 
                                 width={106} 
