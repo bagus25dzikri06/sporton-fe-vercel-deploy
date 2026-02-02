@@ -8,7 +8,8 @@ const nextConfig: NextConfig = {
         hostname: 'be-sporton.agunacourse.com',
         pathname: '/uploads/**'
       }
-    ]
+    ],
+    dangerouslyAllowLocalIP: true
   },
   staticPageGenerationTimeout: 10000
 };

@@ -122,7 +122,7 @@ const ProductModal = ({isOpen, onClose, onSuccess, product} : TProductModalProps
                 name: product.name,
                 price: product.price,
                 description: product.description,
-                categoryId: product.category._id,
+                categoryId: product.category?._id,
                 stock: product.stock
             })
             setImagePreview(product.imageUrl ? getImageUrl(product.imageUrl) : null)

@@ -166,7 +166,7 @@ const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
                         ))}
                     </select>
                 </div></>) : selectedCategory !== '' && rows.filter(
-                    (data) => data.category.name === selectedCategory
+                    (data) => data.category?.name === selectedCategory
                 ).length > 0 ? (<>
                 <div className="bg-white rounded-xl border border-gray-200">
                     <table className="w-full text-left border-collapse">
