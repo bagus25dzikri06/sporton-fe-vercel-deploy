@@ -126,7 +126,7 @@ const TransactionModal = ({isOpen, onClose, transaction, onStatusChange} : TTran
                                     <Button 
                                         className="text-white! bg-[#50C252]! rounded-md" 
                                         size="small"
-                                        onClick={() => handleStatusChange(transaction._id, 'rejected')}
+                                        onClick={() => handleStatusChange(transaction._id, 'paid')}
                                         disabled={isUpdating}>
                                             <>
                                                 <FiCheck size={20} />
