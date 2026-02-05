@@ -110,7 +110,7 @@ const TransactionTable = ({ transactions, onViewDetails } : TTransactionTablePro
                                         </div>
                                     </td>
                                     <td className="px-6 py-7.5 self-center flex items-center gap-3 text-gray-600">
-                                        <button onClick={() => onViewDetails(data)} className="flex gap-2">
+                                        <button onClick={() => onViewDetails(data)} className="flex gap-2 cursor-pointer">
                                             <FiEye size={20} /> View Details
                                         </button>
                                     </td>
