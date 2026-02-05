@@ -122,6 +122,7 @@ const ProductTable = ({products, onDelete, onEdit}: TProductTableProps) => {
                                                     width={52} 
                                                     height={52} 
                                                     alt={data.name}
+                                                    unoptimized={true}
                                                     className="aspect-square object-contain" />
                                                 </div>
                                                 <span>{data.name}</span>

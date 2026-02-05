@@ -27,7 +27,8 @@ const CartItems = ({handlePayment}: TCartItems) => {
                                 src={getImageUrl(item.imageUrl)} 
                                 width={63} 
                                 height={63} 
-                                alt={item.name} 
+                                alt={item.name}
+                                unoptimized={true} 
                                 className="aspect-square object-contain"/>
                             </div>
                             <div className="self-center">

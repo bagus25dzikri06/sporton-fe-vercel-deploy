@@ -32,6 +32,7 @@ const CartPopup = () => {
                         width={63} 
                         height={63} 
                         alt={item.name} 
+                        unoptimized={true}
                         className="aspect-square object-contain"/>
                     </div>
                     <div className="self-center">

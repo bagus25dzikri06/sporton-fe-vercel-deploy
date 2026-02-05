@@ -68,6 +68,7 @@ const CategoriesSection = ({categories}: TCategoriesProps) => {
                                 width={106} 
                                 height={106} 
                                 alt={category.name}
+                                unoptimized={true}
                                 className="mb-[10px] mx-auto"
                             />
                             <div className="text-primary font-medium text-2xl text-center">

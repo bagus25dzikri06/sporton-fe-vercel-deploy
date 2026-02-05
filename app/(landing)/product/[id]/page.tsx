@@ -20,6 +20,7 @@ const ProductDetail = async ({params}: TPageProps) => {
                 width={550} 
                 height={550} 
                 alt={product.name} 
+                unoptimized={true}
                 className="aspect-square object-contain w-full"/>
             </div>
             <div className="w-full py-7">

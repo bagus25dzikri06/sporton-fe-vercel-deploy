@@ -23,7 +23,7 @@ export const getTransactionById = async (id: string): Promise<Transaction> => {
 
 export const updateTransaction = async (id: string, data: FormData): Promise<Transaction> => {
     return await fetchAPI<Transaction>(`/transactions/${id}`, {
-        method: 'PATCH',
+        method: 'PUT',
         headers: {
             ...getAuthHeaders()
         },

@@ -91,7 +91,8 @@ const TransactionModal = ({isOpen, onClose, transaction, onStatusChange} : TTran
                                                 <Image 
                                                 src={getImageUrl(data.productId?.imageUrl)} 
                                                 width={30} 
-                                                height={30} 
+                                                height={30}
+                                                unoptimized={true}
                                                 alt="product image" />
                                             </div>
                                             <div className="font-medium text-xs">{data.productId?.name}</div>

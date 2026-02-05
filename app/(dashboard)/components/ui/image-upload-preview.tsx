@@ -31,7 +31,8 @@ const ImageUploadPreview = ({label, value, onChange, className}: TImageUploadPre
                             alt="preview product" 
                             className="w-full h-full object-cover"
                             width={190}
-                            height={190} />
+                            height={190}
+                            unoptimized={true} />
                         ) : (<>
                             <FiUploadCloud className="text-primary" size={24} />
                             <span className="text-sm font-medium">Click to Upload</span>
